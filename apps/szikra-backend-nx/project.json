@@ -1,0 +1,53 @@
+{
+  "name": "szikra-backend-nx",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/szikra-backend-nx/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/szikra-backend-nx",
+        "main": "apps/szikra-backend-nx/src/main.ts",
+        "tsConfig": "apps/szikra-backend-nx/tsconfig.app.json",
+        "assets": ["apps/szikra-backend-nx/src/assets"],
+        "webpackConfig": "apps/szikra-backend-nx/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "szikra-backend-nx:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "szikra-backend-nx:build:development"
+        },
+        "production": {
+          "buildTarget": "szikra-backend-nx:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/szikra-backend-nx/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
