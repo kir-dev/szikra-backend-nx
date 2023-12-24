@@ -1,0 +1,25 @@
+services:
+  gateway:
+    image: gateway-service
+    build:
+      dockerfile: ./apps/gateway/Dockerfile
+    env_file:
+      - ./apps/gateway/.env
+    ports:
+      - "${GATEWAY_SERVICE_PORT}:${GATEWAY_SERVICE_PORT}"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${GATEWAY_SERVICE_PORT}/health"]
+      interval: 30s
+    depends_on:
+      - "members"
+  members:
+    image: members-service
+    env_file:
+      - ./apps/members/.env
+    build:
+      dockerfile: ./apps/members/Dockerfile
+
+networks:
+  default:
+    driver: bridge
+    name: szikra-network

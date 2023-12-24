@@ -14,11 +14,13 @@
         "outputPath": "dist/apps/members",
         "main": "apps/members/src/main.ts",
         "tsConfig": "apps/members/tsconfig.json",
-        "webpackConfig": "apps/members/webpack.config.js"
+        "webpackConfig": "apps/members/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},
-        "production": {}
+        "production": {
+        }
       }
     },
     "serve": {
@@ -39,6 +41,10 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/members/Dockerfile . -t members"
     }
   },
   "tags": []

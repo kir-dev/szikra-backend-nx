@@ -14,11 +14,13 @@
         "outputPath": "dist/apps/gateway",
         "main": "apps/gateway/src/main.ts",
         "tsConfig": "apps/gateway/tsconfig.json",
-        "webpackConfig": "apps/gateway/webpack.config.js"
+        "webpackConfig": "apps/gateway/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},
-        "production": {}
+        "production": {
+        }
       }
     },
     "serve": {
@@ -39,6 +41,10 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/gateway/Dockerfile . -t gateway"
     }
   },
   "tags": []
