@@ -1,14 +1,14 @@
 services:
-  members-db:
+  db:
     image: postgres:alpine
     env_file:
-      - ./apps/members/.env
+      - .env
     ports:
-      - ${MEMBERS_DB_PORT}:${MEMBERS_DB_PORT}
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
-      - ./apps/members/db:/var/lib/postgresql/data
+      - ./db:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${MEMBERS_DB_USER}", "-d", "${MEMBERS_DB_NAME}"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
     networks:
       - default
 networks:
