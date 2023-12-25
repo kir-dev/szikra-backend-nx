@@ -1,0 +1,4 @@
+export enum ServiceNames {
+  MEMBERS = 'MEMBERS_SERVICE',
+  AUTHORIZATION = 'AUTHORIZATION_SERVICE',
+}

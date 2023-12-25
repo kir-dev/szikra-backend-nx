@@ -15,7 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@szikra-backend-nx/auth-guard": ["libs/auth-guard/src/index.ts"]
+      "@szikra-backend-nx/auth-guard": ["libs/auth-guard/src/index.ts"],
+      "@szikra-backend-nx/service-constants": [
+        "libs/service-constants/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

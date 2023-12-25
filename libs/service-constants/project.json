@@ -1,0 +1,23 @@
+{
+  "name": "service-constants",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/service-constants/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/service-constants",
+        "main": "libs/service-constants/src/index.ts",
+        "tsConfig": "libs/service-constants/tsconfig.lib.json",
+        "assets": ["libs/service-constants/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}

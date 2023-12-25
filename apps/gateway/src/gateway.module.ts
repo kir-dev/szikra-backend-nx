@@ -5,6 +5,7 @@ import {
   ClientProxyFactory,
   Transport,
 } from '@nestjs/microservices';
+import { ServiceNames } from '@szikra-backend-nx/service-constants';
 
 import { ConfigService } from './config.service';
 import { GatewayController } from './gateway.controller';
@@ -19,7 +20,7 @@ import { GatewayController } from './gateway.controller';
   providers: [
     ConfigService,
     {
-      provide: 'MEMBER_SERVICE',
+      provide: ServiceNames.MEMBERS,
       useFactory: (configService: ConfigService) => {
         const memberServiceOptions: ClientOptions = {
           transport: Transport.TCP,
@@ -33,7 +34,7 @@ import { GatewayController } from './gateway.controller';
       inject: [ConfigService],
     },
     {
-      provide: 'AUTHORIZATION_SERVICE',
+      provide: ServiceNames.AUTHORIZATION,
       useFactory: (configService: ConfigService) => {
         const authorizationServiceOptions: ClientOptions = {
           transport: Transport.TCP,
