@@ -1,0 +1,17 @@
+services:
+  members-db:
+    image: postgres:alpine
+    env_file:
+      - ./apps/members/.env
+    ports:
+      - ${MEMBERS_DB_PORT}:${MEMBERS_DB_PORT}
+    volumes:
+      - ./apps/members/db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${MEMBERS_DB_USER}", "-d", "${MEMBERS_DB_NAME}"]
+    networks:
+      - default
+networks:
+  default:
+    driver: bridge
+    name: szikra-network
