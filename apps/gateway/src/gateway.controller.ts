@@ -1,9 +1,7 @@
 import { Controller, Get, Inject, UseGuards } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { AuthGuard, Roles } from '@szikra-backend-nx/auth-guard';
 import { firstValueFrom } from 'rxjs';
-
-import { AuthGuard } from './auth.guard';
-import { Roles } from './roles.decorator';
 
 @Controller()
 export class GatewayController {
@@ -12,7 +10,7 @@ export class GatewayController {
   ) {}
 
   @UseGuards(AuthGuard)
-  @Roles(['delete'])
+  @Roles(['read'])
   @Get('member')
   async getHello(): Promise<string> {
     return firstValueFrom(
