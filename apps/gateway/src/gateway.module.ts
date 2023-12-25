@@ -9,6 +9,7 @@ import { ServiceNames } from '@szikra-backend-nx/service-constants';
 
 import { ConfigService } from './config.service';
 import { GatewayController } from './gateway.controller';
+import { MemberController } from './member.controller';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { GatewayController } from './gateway.controller';
       secret: 'secret',
     }),
   ],
-  controllers: [GatewayController],
+  controllers: [GatewayController, MemberController],
   providers: [
     ConfigService,
     {

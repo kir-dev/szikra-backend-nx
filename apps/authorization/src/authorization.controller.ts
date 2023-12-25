@@ -12,7 +12,7 @@ export class AuthorizationController {
   async login(data: LoginDto): Promise<string> {
     const payload: RequestUser = {
       userId: data.userId,
-      permissions: ['read', 'write'],
+      permissions: ['read', 'create', 'update', 'delete'],
     };
     return this.jwtService.sign(payload);
   }
