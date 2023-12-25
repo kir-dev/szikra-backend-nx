@@ -14,6 +14,7 @@ import {
   MembersMessagePatterns,
   ServiceNames,
 } from '@szikra-backend-nx/service-constants';
+import { LoginDto, WithUser } from '@szikra-backend-nx/types';
 import { firstValueFrom } from 'rxjs';
 
 @Controller()
@@ -27,7 +28,7 @@ export class GatewayController {
   @UseGuards(AuthGuard)
   @Roles(['read'])
   @Get('member')
-  async getHello(@Req() req: Request & { user: unknown }): Promise<string> {
+  async getHello(@Req() req: WithUser<Request>): Promise<string> {
     return firstValueFrom(
       this.memberService.send<string>(
         MembersMessagePatterns.GET_MEMBERS,
@@ -37,7 +38,7 @@ export class GatewayController {
   }
 
   @Post('login')
-  async login(@Body() body: unknown): Promise<string> {
+  async login(@Body() body: LoginDto): Promise<string> {
     return firstValueFrom(
       this.authorizationService.send<string>(
         AuthorizationMessagePatterns.LOGIN,

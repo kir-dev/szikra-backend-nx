@@ -9,8 +9,7 @@ export class MemberController {
   constructor(private readonly appService: MemberService) {}
 
   @MessagePattern(MembersMessagePatterns.GET_MEMBERS)
-  getHello(data): string {
-    console.log(data);
+  getMembers(): string {
     return this.appService.getHello();
   }
 }

@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import { RequestUser } from '@szikra-backend-nx/types';
 
 import { Roles } from './roles.decorator';
 
@@ -60,13 +61,13 @@ export class AuthGuard implements CanActivate {
     return this.reflector.get<string[]>(Roles, context.getHandler()) ?? [];
   }
 
-  private getTokenPayloadFromContext(context: ExecutionContext) {
+  private getTokenPayloadFromContext(context: ExecutionContext): RequestUser {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     return this.getTokenPayload(token);
   }
 
-  private getTokenPayload(token: string) {
+  private getTokenPayload(token: string): RequestUser {
     return this.jwtService.verify(token);
   }
 
@@ -75,7 +76,7 @@ export class AuthGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 
-  private setUser(context: ExecutionContext) {
+  private setUser(context: ExecutionContext): void {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     request.user = this.getTokenPayload(token);
