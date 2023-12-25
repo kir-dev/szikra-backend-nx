@@ -10,6 +10,10 @@ export class ConfigService {
       host: string;
       port: number;
     };
+    authorizationService: {
+      host: string;
+      port: number;
+    };
   };
 
   constructor() {
@@ -19,6 +23,10 @@ export class ConfigService {
       memberService: {
         host: env.get('MEMBER_SERVICE_HOST').required().asString(),
         port: env.get('MEMBER_SERVICE_PORT').required().asPortNumber(),
+      },
+      authorizationService: {
+        host: env.get('AUTHORIZATION_SERVICE_HOST').required().asString(),
+        port: env.get('AUTHORIZATION_SERVICE_PORT').required().asPortNumber(),
       },
     };
   }

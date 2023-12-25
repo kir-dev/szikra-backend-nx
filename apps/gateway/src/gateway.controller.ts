@@ -1,6 +1,9 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, UseGuards } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+
+import { AuthGuard } from './auth.guard';
+import { Roles } from './roles.decorator';
 
 @Controller()
 export class GatewayController {
@@ -8,6 +11,8 @@ export class GatewayController {
     @Inject('MEMBER_SERVICE') private readonly memberService: ClientProxy,
   ) {}
 
+  @UseGuards(AuthGuard)
+  @Roles(['delete'])
   @Get('member')
   async getHello(): Promise<string> {
     return firstValueFrom(
