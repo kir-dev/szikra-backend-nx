@@ -19,9 +19,7 @@ async function bootstrap() {
   );
   await app.listen();
   Logger.log(
-    `Member module is listening on: ${config.get('host')}:${config.get(
-      'port',
-    )}`,
+    `Module is listening on: ${config.get('host')}:${config.get('port')}`,
     MemberModule.name,
   );
 }

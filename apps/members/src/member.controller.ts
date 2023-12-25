@@ -8,7 +8,8 @@ export class MemberController {
   constructor(private readonly appService: MemberService) {}
 
   @MessagePattern('member_get_hello')
-  getHello(): string {
+  getHello(data): string {
+    console.log(data);
     return this.appService.getHello();
   }
 }

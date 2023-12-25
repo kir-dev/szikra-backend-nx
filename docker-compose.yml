@@ -1,21 +1,28 @@
 services:
-  gateway:
+  gateway-service:
     image: gateway-service
     build:
       dockerfile: ./apps/gateway/Dockerfile
     env_file:
-      - ./apps/gateway/.env
+      - ./apps/gateway/.env.docker
     ports:
       - "${GATEWAY_SERVICE_PORT}:${GATEWAY_SERVICE_PORT}"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${GATEWAY_SERVICE_PORT}/health"]
       interval: 30s
     depends_on:
-      - "members"
-  members:
+      - "members-service"
+      - "authorization-service"
+  authorization-service:
+    image: authorization-service
+    env_file:
+      - ./apps/authorization/.env.docker
+    build:
+      dockerfile: ./apps/authorization/Dockerfile
+  members-service:
     image: members-service
     env_file:
-      - ./apps/members/.env
+      - ./apps/members/.env.docker
     build:
       dockerfile: ./apps/members/Dockerfile
 

@@ -22,6 +22,7 @@ export class AuthGuard implements CanActivate {
     if (!isAuthenticated) throw new UnauthorizedException();
     const doRolesMatch = this.doRolesMatch(context);
     if (!doRolesMatch) throw new ForbiddenException();
+    this.setUser(context);
     return isAuthenticated && doRolesMatch;
   }
 
@@ -72,5 +73,11 @@ export class AuthGuard implements CanActivate {
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers['authorization']?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
+  }
+
+  private setUser(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest();
+    const token = this.extractTokenFromHeader(request);
+    request.user = this.getTokenPayload(token);
   }
 }
