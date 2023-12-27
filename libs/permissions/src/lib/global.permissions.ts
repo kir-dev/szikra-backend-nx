@@ -1,1 +1,3 @@
-export enum GlobalPermissions {}
+export enum GlobalPermissions {
+  SUPERUSER = 'global.superuser',
+}

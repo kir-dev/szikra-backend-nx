@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import { GlobalPermissions } from '@szikra-backend-nx/permissions';
 import { PermissionItem, RequestUser } from '@szikra-backend-nx/types';
 
 import { Permissions } from './permissions.decorator';
@@ -60,6 +61,7 @@ export class AuthGuard implements CanActivate {
     required: string[],
     id?: string,
   ): boolean {
+    if (this.hasSuperuserPermission(permissions)) return true;
     return required.every((requiredPermission) => {
       const permission = permissions.find(
         (permission) => permission.permission === requiredPermission,
@@ -71,6 +73,12 @@ export class AuthGuard implements CanActivate {
         return id && permission.entityId === id;
       }
     });
+  }
+
+  private hasSuperuserPermission(permissions: PermissionItem[]) {
+    return permissions.some(
+      (permission) => permission.permission === GlobalPermissions.SUPERUSER,
+    );
   }
 
   private getRequiredPermissionsFromContext(

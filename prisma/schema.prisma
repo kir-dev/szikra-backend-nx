@@ -23,15 +23,24 @@ model User {
 }
 
 model Role {
-  id          String     @id @default(uuid())
-  name        String     @unique
-  permission  String
+  id          String           @id @default(uuid())
+  name        String           @unique
   communityId String?
-  community   Community? @relation(fields: [communityId], references: [id])
-  global      Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  community   Community?       @relation(fields: [communityId], references: [id])
+  global      Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
   userRoles   UserRole[]
+  permissions RolePermission[]
+}
+
+model RolePermission {
+  id         String   @id @default(uuid())
+  roleId     String
+  role       Role     @relation(fields: [roleId], references: [id])
+  permission String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model UserRole {
@@ -46,7 +55,6 @@ model UserRole {
 
 model Member {
   id            String       @id @default(uuid())
-  externalId    String       @unique
   firstName     String
   lastName      String
   nickName      String?

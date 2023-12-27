@@ -1,26 +1,23 @@
 import { Controller, Get } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { MessagePattern } from '@nestjs/microservices';
-import { CommunitiesPermissions } from '@szikra-backend-nx/permissions';
 import { AuthorizationMessagePatterns } from '@szikra-backend-nx/service-constants';
-import { LoginDto, RequestUser } from '@szikra-backend-nx/types';
+import { LoginDto, RegisterDto } from '@szikra-backend-nx/types';
+
+import { AuthorizationService } from './authorization.service';
 
 @Controller()
 export class AuthorizationController {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly authorizationService: AuthorizationService) {}
 
   @MessagePattern(AuthorizationMessagePatterns.LOGIN)
-  async login(data: LoginDto): Promise<string> {
-    const payload: RequestUser = {
-      userId: data.userId,
-      permissions: [
-        {
-          permission: CommunitiesPermissions.READ,
-          global: true,
-        },
-      ],
-    };
-    return this.jwtService.sign(payload);
+  async login(data: LoginDto): Promise<string | null> {
+    return this.authorizationService.createJwtToken(data.userId);
+  }
+
+  @MessagePattern(AuthorizationMessagePatterns.REGISTER)
+  async register(data: RegisterDto): Promise<string | undefined> {
+    const user = await this.authorizationService.createUser(data);
+    return this.authorizationService.createJwtToken(user.id);
   }
 
   @Get('health')

@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import {
   AuthorizationMessagePatterns,
@@ -16,12 +23,14 @@ export class GatewayController {
 
   @Post('login')
   async login(@Body() body: LoginDto): Promise<string> {
-    return firstValueFrom(
-      this.authorizationService.send<string>(
+    const token = await firstValueFrom(
+      this.authorizationService.send<string | null>(
         AuthorizationMessagePatterns.LOGIN,
         body,
       ),
     );
+    if (!token) throw new UnauthorizedException();
+    return token;
   }
 
   @Get('health')
