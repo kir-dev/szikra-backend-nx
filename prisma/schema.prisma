@@ -21,6 +21,7 @@ model Member {
   address       String?
   room          String?
   status        MemberStatus @default(NEWBIE)
+  memberships   Membership[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
@@ -32,4 +33,27 @@ enum MemberStatus {
   DELETED
   ARCHIVED
   RETIRED
+}
+
+model Community {
+  id          String       @id @default(uuid())
+  name        String
+  room        String?
+  email       String?
+  description String?
+  memberships Membership[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Membership {
+  id          String    @id @default(uuid())
+  member      Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId    String
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  communityId String
+  role        String?
+  updatedAt   DateTime  @updatedAt
+  startDate   DateTime  @default(now())
+  endDate     DateTime?
 }
