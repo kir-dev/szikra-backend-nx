@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MessagePattern } from '@nestjs/microservices';
+import { CommunitiesPermissions } from '@szikra-backend-nx/permissions';
 import { AuthorizationMessagePatterns } from '@szikra-backend-nx/service-constants';
 import { LoginDto, RequestUser } from '@szikra-backend-nx/types';
 
@@ -12,7 +13,12 @@ export class AuthorizationController {
   async login(data: LoginDto): Promise<string> {
     const payload: RequestUser = {
       userId: data.userId,
-      permissions: ['read', 'create', 'update', 'delete'],
+      permissions: [
+        {
+          permission: CommunitiesPermissions.READ,
+          global: true,
+        },
+      ],
     };
     return this.jwtService.sign(payload);
   }

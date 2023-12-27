@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { RequestUser } from '@szikra-backend-nx/types';
+import { PermissionItem, RequestUser } from '@szikra-backend-nx/types';
 
-import { Roles } from './roles.decorator';
+import { Permissions } from './permissions.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -28,9 +28,14 @@ export class AuthGuard implements CanActivate {
   }
 
   private doRolesMatch(context: ExecutionContext): boolean {
-    const roles = this.getRolesFromContext(context);
+    const entityId = this.getEntityIdFromContext(context);
+    const requiredPermissions = this.getRequiredPermissionsFromContext(context);
     const tokenPayload = this.getTokenPayloadFromContext(context);
-    return this.hasAllPermissions(tokenPayload.permissions ?? [], roles);
+    return this.hasAllPermissions(
+      tokenPayload.permissions ?? [],
+      requiredPermissions,
+      entityId,
+    );
   }
 
   private isAuthenticated(context: ExecutionContext): boolean {
@@ -51,14 +56,29 @@ export class AuthGuard implements CanActivate {
   }
 
   private hasAllPermissions(
-    permissions: string[],
+    permissions: PermissionItem[],
     required: string[],
+    id?: string,
   ): boolean {
-    return required.every((permission) => permissions.includes(permission));
+    return required.every((requiredPermission) => {
+      const permission = permissions.find(
+        (permission) => permission.permission === requiredPermission,
+      );
+      if (!permission) return false;
+      if ('global' in permission) {
+        return permission.global;
+      } else {
+        return id && permission.entityId === id;
+      }
+    });
   }
 
-  private getRolesFromContext(context: ExecutionContext): string[] {
-    return this.reflector.get<string[]>(Roles, context.getHandler()) ?? [];
+  private getRequiredPermissionsFromContext(
+    context: ExecutionContext,
+  ): string[] {
+    return (
+      this.reflector.get<string[]>(Permissions, context.getHandler()) ?? []
+    );
   }
 
   private getTokenPayloadFromContext(context: ExecutionContext): RequestUser {
@@ -80,5 +100,12 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     request.user = this.getTokenPayload(token);
+  }
+
+  private getEntityIdFromContext(
+    context: ExecutionContext,
+  ): string | undefined {
+    const request = context.switchToHttp().getRequest();
+    return request.params?.id;
   }
 }

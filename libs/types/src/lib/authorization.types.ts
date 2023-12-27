@@ -9,5 +9,9 @@ export class LoginDto {
 
 export type RequestUser = {
   userId: string;
-  permissions: string[];
+  permissions: PermissionItem[];
 };
+
+export type PermissionItem = {
+  permission: string;
+} & ({ entityId: string } | { global: true });

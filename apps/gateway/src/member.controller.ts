@@ -12,7 +12,8 @@ import {
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Member } from '@prisma/client';
-import { AuthGuard, Roles } from '@szikra-backend-nx/auth-guard';
+import { AuthGuard, Permissions } from '@szikra-backend-nx/auth-guard';
+import { MembersPermissions } from '@szikra-backend-nx/permissions';
 import {
   MembersMessagePatterns,
   ServiceNames,
@@ -28,7 +29,7 @@ export class MemberController {
     @Inject(ServiceNames.MEMBERS) private readonly memberService: ClientProxy,
   ) {}
 
-  @Roles(['read'])
+  @Permissions([MembersPermissions.READ])
   @Get()
   getMembers(): Promise<Member[]> {
     return firstValueFrom(
@@ -36,7 +37,7 @@ export class MemberController {
     );
   }
 
-  @Roles(['read'])
+  @Permissions([MembersPermissions.READ])
   @Get(':id')
   getMemberById(@Param('id') id: string): Promise<Member> {
     return firstValueFrom(
@@ -47,7 +48,7 @@ export class MemberController {
     );
   }
 
-  @Roles(['create'])
+  @Permissions([MembersPermissions.CREATE])
   @Post()
   createMember(@Body() body: CreateMemberDto): Promise<Member> {
     return firstValueFrom(
@@ -58,7 +59,7 @@ export class MemberController {
     );
   }
 
-  @Roles(['update'])
+  @Permissions([MembersPermissions.UPDATE])
   @Patch(':id')
   updateMember(
     @Param('id') id: string,
@@ -72,7 +73,7 @@ export class MemberController {
     );
   }
 
-  @Roles(['delete'])
+  @Permissions([MembersPermissions.DELETE])
   @Delete(':id')
   async deleteMember(@Param('id') id: string): Promise<void> {
     await firstValueFrom(

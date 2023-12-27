@@ -12,7 +12,8 @@ import {
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Community } from '@prisma/client';
-import { AuthGuard, Roles } from '@szikra-backend-nx/auth-guard';
+import { AuthGuard, Permissions } from '@szikra-backend-nx/auth-guard';
+import { CommunitiesPermissions } from '@szikra-backend-nx/permissions';
 import {
   CommunitiesMessagePatterns,
   ServiceNames,
@@ -32,7 +33,7 @@ export class CommunitiesController {
     private readonly communitiesService: ClientProxy,
   ) {}
 
-  @Roles(['read'])
+  @Permissions([CommunitiesPermissions.READ])
   @Get()
   getCommunities(): Promise<Community[]> {
     return firstValueFrom(
@@ -43,7 +44,7 @@ export class CommunitiesController {
     );
   }
 
-  @Roles(['read'])
+  @Permissions([CommunitiesPermissions.READ])
   @Get(':id')
   getCommunityById(@Param('id') id: string): Promise<Community> {
     return firstValueFrom(
@@ -54,7 +55,7 @@ export class CommunitiesController {
     );
   }
 
-  @Roles(['create'])
+  @Permissions([CommunitiesPermissions.CREATE])
   @Post()
   createCommunity(@Body() body: CreateCommunityDto): Promise<Community> {
     return firstValueFrom(
@@ -65,7 +66,7 @@ export class CommunitiesController {
     );
   }
 
-  @Roles(['update'])
+  @Permissions([CommunitiesPermissions.UPDATE])
   @Patch(':id')
   updateCommunity(
     @Param('id') id: string,
@@ -82,7 +83,8 @@ export class CommunitiesController {
     );
   }
 
-  @Roles(['delete'])
+  @Permissions([CommunitiesPermissions.DELETE])
+  @Permissions(['delete'])
   @Delete(':id')
   async deleteCommunity(@Param('id') id: string): Promise<void> {
     await firstValueFrom(
