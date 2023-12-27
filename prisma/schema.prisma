@@ -10,8 +10,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id         String     @id @default(uuid())
+  externalId String     @unique
+  name       String
+  email      String     @unique
+  memberId   String?    @unique
+  member     Member?    @relation(fields: [memberId], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  userRoles  UserRole[]
+}
+
+model Role {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  permission  String
+  communityId String?
+  community   Community? @relation(fields: [communityId], references: [id])
+  global      Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  userRoles   UserRole[]
+}
+
+model UserRole {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  roleId    String
+  role      Role     @relation(fields: [roleId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Member {
   id            String       @id @default(uuid())
+  externalId    String       @unique
   firstName     String
   lastName      String
   nickName      String?
@@ -24,6 +59,7 @@ model Member {
   memberships   Membership[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
+  user          User?
 }
 
 enum MemberStatus {
@@ -44,6 +80,7 @@ model Community {
   memberships Membership[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  roles       Role[]
 }
 
 model Membership {
