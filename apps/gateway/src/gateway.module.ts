@@ -7,6 +7,7 @@ import {
 } from '@nestjs/microservices';
 import { ServiceNames } from '@szikra-backend-nx/service-constants';
 
+import { CommunitiesController } from './community.controller';
 import { ConfigService } from './config.service';
 import { GatewayController } from './gateway.controller';
 import { MemberController } from './member.controller';
@@ -17,7 +18,7 @@ import { MemberController } from './member.controller';
       secret: 'secret',
     }),
   ],
-  controllers: [GatewayController, MemberController],
+  controllers: [GatewayController, MemberController, CommunitiesController],
   providers: [
     ConfigService,
     {
@@ -25,10 +26,7 @@ import { MemberController } from './member.controller';
       useFactory: (configService: ConfigService) => {
         const memberServiceOptions: ClientOptions = {
           transport: Transport.TCP,
-          options: {
-            host: configService.get('memberService').host,
-            port: configService.get('memberService').port,
-          },
+          options: configService.get('memberService'),
         };
         return ClientProxyFactory.create(memberServiceOptions);
       },
@@ -39,12 +37,23 @@ import { MemberController } from './member.controller';
       useFactory: (configService: ConfigService) => {
         const authorizationServiceOptions: ClientOptions = {
           transport: Transport.TCP,
-          options: {
-            host: configService.get('authorizationService').host,
-            port: configService.get('authorizationService').port,
-          },
+          options: configService.get('authorizationService'),
         };
         return ClientProxyFactory.create(authorizationServiceOptions);
+      },
+      inject: [ConfigService],
+    },
+    {
+      provide: ServiceNames.COMMUNITIES,
+      useFactory: (configService: ConfigService) => {
+        const communityServiceOptions: ClientOptions = {
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('communityService').host,
+            port: configService.get('communityService').port,
+          },
+        };
+        return ClientProxyFactory.create(communityServiceOptions);
       },
       inject: [ConfigService],
     },

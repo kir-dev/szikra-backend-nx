@@ -25,6 +25,12 @@ services:
       - ./apps/members/.env.docker
     build:
       dockerfile: ./apps/members/Dockerfile
+  communities-service:
+    image: communities-service
+    env_file:
+      - ./apps/communities/.env.docker
+    build:
+      dockerfile: ./apps/communities/Dockerfile
 
 networks:
   default:

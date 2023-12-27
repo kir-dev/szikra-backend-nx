@@ -1,0 +1,45 @@
+{
+  "name": "communities",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/communities/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/communities",
+        "main": "apps/communities/src/main.ts",
+        "tsConfig": "apps/communities/tsconfig.app.json",
+        "webpackConfig": "apps/communities/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "communities:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "communities:build:development"
+        },
+        "production": {
+          "buildTarget": "communities:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}
