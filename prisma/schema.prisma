@@ -41,6 +41,8 @@ model RolePermission {
   permission String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  @@unique([permission, roleId])
 }
 
 model UserRole {

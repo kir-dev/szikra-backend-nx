@@ -2,22 +2,17 @@ import * as dotenv from 'dotenv';
 import * as env from 'env-var';
 dotenv.config();
 
+type ServiceConfig = {
+  host: string;
+  port: number;
+};
+
 export class ConfigService {
-  private readonly envConfig: {
-    host: string;
-    port: number;
-    memberService: {
-      host: string;
-      port: number;
-    };
-    authorizationService: {
-      host: string;
-      port: number;
-    };
-    communityService: {
-      host: string;
-      port: number;
-    };
+  private readonly envConfig: ServiceConfig & {
+    memberService: ServiceConfig;
+    authorizationService: ServiceConfig;
+    communityService: ServiceConfig;
+    roleService: ServiceConfig;
   };
 
   constructor() {
@@ -35,6 +30,10 @@ export class ConfigService {
       communityService: {
         host: env.get('COMMUNITY_SERVICE_HOST').required().asString(),
         port: env.get('COMMUNITY_SERVICE_PORT').required().asPortNumber(),
+      },
+      roleService: {
+        host: env.get('ROLE_SERVICE_HOST').required().asString(),
+        port: env.get('ROLE_SERVICE_PORT').required().asPortNumber(),
       },
     };
   }

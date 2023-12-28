@@ -1,0 +1,45 @@
+{
+  "name": "roles",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/roles/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/roles",
+        "main": "apps/roles/src/main.ts",
+        "tsConfig": "apps/roles/tsconfig.app.json",
+        "webpackConfig": "apps/roles/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "roles:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "roles:build:development"
+        },
+        "production": {
+          "buildTarget": "roles:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}

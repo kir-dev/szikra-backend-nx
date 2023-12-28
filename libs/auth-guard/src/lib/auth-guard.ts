@@ -75,10 +75,16 @@ export class AuthGuard implements CanActivate {
     });
   }
 
-  private hasSuperuserPermission(permissions: PermissionItem[]) {
-    return permissions.some(
+  private hasSuperuserPermission(permissions: PermissionItem[], id?: string) {
+    const superuserPermission = permissions.find(
       (permission) => permission.permission === GlobalPermissions.SUPERUSER,
     );
+    if (!superuserPermission) return false;
+    if ('global' in superuserPermission) {
+      return superuserPermission.global;
+    } else {
+      return id && superuserPermission.entityId === id;
+    }
   }
 
   private getRequiredPermissionsFromContext(

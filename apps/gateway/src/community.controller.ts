@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, Permissions } from '@szikra-backend-nx/auth-guard';
 import { CommunitiesPermissions } from '@szikra-backend-nx/permissions';
 import {
@@ -25,6 +25,7 @@ import {
 import { firstValueFrom } from 'rxjs';
 
 @ApiBearerAuth()
+@ApiTags('communities')
 @UseGuards(AuthGuard)
 @Controller('community')
 export class CommunitiesController {

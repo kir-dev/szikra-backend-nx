@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import {
   AuthorizationMessagePatterns,
   ServiceNames,
@@ -14,6 +14,7 @@ import {
 import { LoginDto } from '@szikra-backend-nx/types';
 import { firstValueFrom } from 'rxjs';
 
+@ApiTags('authorization')
 @Controller('auth')
 export class AuthorizationController {
   constructor(

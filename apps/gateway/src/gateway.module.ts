@@ -12,6 +12,8 @@ import { CommunitiesController } from './community.controller';
 import { ConfigService } from './config.service';
 import { GatewayController } from './gateway.controller';
 import { MemberController } from './member.controller';
+import { RolesController } from './roles.controller';
+import { RolesCommunityController } from './roles-community.controller';
 
 @Module({
   imports: [
@@ -21,9 +23,11 @@ import { MemberController } from './member.controller';
   ],
   controllers: [
     GatewayController,
+    AuthorizationController,
     MemberController,
     CommunitiesController,
-    AuthorizationController,
+    RolesController,
+    RolesCommunityController,
   ],
   providers: [
     ConfigService,
@@ -60,6 +64,20 @@ import { MemberController } from './member.controller';
           },
         };
         return ClientProxyFactory.create(communityServiceOptions);
+      },
+      inject: [ConfigService],
+    },
+    {
+      provide: ServiceNames.ROLES,
+      useFactory: (configService: ConfigService) => {
+        const rolesServiceOptions: ClientOptions = {
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('roleService').host,
+            port: configService.get('roleService').port,
+          },
+        };
+        return ClientProxyFactory.create(rolesServiceOptions);
       },
       inject: [ConfigService],
     },
