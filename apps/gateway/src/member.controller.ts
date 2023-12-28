@@ -10,15 +10,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { Member } from '@prisma/client';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { AuthGuard, Permissions } from '@szikra-backend-nx/auth-guard';
 import { MembersPermissions } from '@szikra-backend-nx/permissions';
 import {
   MembersMessagePatterns,
   ServiceNames,
 } from '@szikra-backend-nx/service-constants';
-import { CreateMemberDto, UpdateMemberDto } from '@szikra-backend-nx/types';
+import {
+  CreateMemberDto,
+  MemberDto,
+  UpdateMemberDto,
+} from '@szikra-backend-nx/types';
 import { firstValueFrom } from 'rxjs';
 
 @ApiBearerAuth()
@@ -31,17 +34,22 @@ export class MemberController {
 
   @Permissions([MembersPermissions.READ])
   @Get()
-  getMembers(): Promise<Member[]> {
+  @ApiOkResponse({ type: MemberDto, isArray: true })
+  getMembers(): Promise<MemberDto[]> {
     return firstValueFrom(
-      this.memberService.send<Member[]>(MembersMessagePatterns.GET_MEMBERS, {}),
+      this.memberService.send<MemberDto[]>(
+        MembersMessagePatterns.GET_MEMBERS,
+        {},
+      ),
     );
   }
 
   @Permissions([MembersPermissions.READ])
   @Get(':id')
-  getMemberById(@Param('id') id: string): Promise<Member> {
+  @ApiOkResponse({ type: MemberDto })
+  getMemberById(@Param('id') id: string): Promise<MemberDto> {
     return firstValueFrom(
-      this.memberService.send<Member>(
+      this.memberService.send<MemberDto>(
         MembersMessagePatterns.GET_MEMBER_BY_ID,
         id,
       ),
@@ -50,9 +58,10 @@ export class MemberController {
 
   @Permissions([MembersPermissions.CREATE])
   @Post()
-  createMember(@Body() body: CreateMemberDto): Promise<Member> {
+  @ApiOkResponse({ type: MemberDto })
+  createMember(@Body() body: CreateMemberDto): Promise<MemberDto> {
     return firstValueFrom(
-      this.memberService.send<Member>(
+      this.memberService.send<MemberDto>(
         MembersMessagePatterns.CREATE_MEMBER,
         body,
       ),
@@ -61,12 +70,13 @@ export class MemberController {
 
   @Permissions([MembersPermissions.UPDATE])
   @Patch(':id')
+  @ApiOkResponse({ type: MemberDto })
   updateMember(
     @Param('id') id: string,
     @Body() body: UpdateMemberDto,
-  ): Promise<Member> {
+  ): Promise<MemberDto> {
     return firstValueFrom(
-      this.memberService.send<Member>(MembersMessagePatterns.UPDATE_MEMBER, {
+      this.memberService.send<MemberDto>(MembersMessagePatterns.UPDATE_MEMBER, {
         id,
         data: body,
       }),
@@ -75,9 +85,13 @@ export class MemberController {
 
   @Permissions([MembersPermissions.DELETE])
   @Delete(':id')
+  @ApiOkResponse()
   async deleteMember(@Param('id') id: string): Promise<void> {
     await firstValueFrom(
-      this.memberService.send<Member>(MembersMessagePatterns.DELETE_MEMBER, id),
+      this.memberService.send<MemberDto>(
+        MembersMessagePatterns.DELETE_MEMBER,
+        id,
+      ),
     );
   }
 }

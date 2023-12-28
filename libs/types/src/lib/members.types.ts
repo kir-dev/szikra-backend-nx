@@ -1,6 +1,61 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { $Enums, Member } from '@prisma/client';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
+
+export class MemberDto implements Member {
+  @ApiProperty({ example: 'e3dc756a-0523-45bc-8a56-77e93ba71450' })
+  @IsString()
+  id: string;
+
+  @ApiProperty({ example: 'Károly' })
+  @IsString()
+  firstName: string;
+
+  @ApiProperty({ example: 'Simonyi' })
+  @IsString()
+  lastName: string;
+
+  @ApiProperty({ example: 'Karcsi', required: false })
+  @IsString()
+  @IsOptional()
+  nickName: string | null;
+
+  @ApiProperty({ example: 'karoly@simonyi,bme.hu' })
+  @IsString()
+  internalEmail: string;
+
+  @ApiProperty({ example: 'karoly@simonyi.hu', required: false })
+  @IsString()
+  @IsOptional()
+  externalEmail: string | null;
+
+  @ApiProperty({ example: 'Budapest', required: false })
+  @IsString()
+  @IsOptional()
+  address: string | null;
+
+  @ApiProperty({ example: '+36301234567', required: false })
+  @IsString()
+  @IsOptional()
+  phone: string | null;
+
+  @ApiProperty({ example: '1320', required: false })
+  @IsString()
+  @IsOptional()
+  room: string | null;
+
+  @ApiProperty({ example: $Enums.MemberStatus.ACTIVE })
+  @IsEnum($Enums.MemberStatus)
+  status: $Enums.MemberStatus;
+
+  @ApiProperty({ example: new Date() })
+  @IsDate()
+  createdAt: Date;
+
+  @ApiProperty({ example: new Date() })
+  @IsDate()
+  updatedAt: Date;
+}
 
 export class CreateMemberDto
   implements Omit<Member, 'id' | 'createdAt' | 'updatedAt'>
@@ -17,7 +72,10 @@ export class CreateMemberDto
   @IsString()
   internalEmail: string;
 
-  @ApiProperty({ example: 'karoly@simonyi.hu', nullable: true })
+  @ApiProperty({
+    example: 'karoly@simonyi.hu',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   externalEmail: string | null;
@@ -26,17 +84,17 @@ export class CreateMemberDto
   @IsString()
   phone: string;
 
-  @ApiProperty({ example: 'Budapest', nullable: true })
+  @ApiProperty({ example: 'Budapest', required: false })
   @IsString()
   @IsOptional()
   address: string | null;
 
-  @ApiProperty({ example: 'Karcsi', nullable: true })
+  @ApiProperty({ example: 'Karcsi', required: false })
   @IsString()
   @IsOptional()
   nickName: string | null;
 
-  @ApiProperty({ example: '1320', nullable: true })
+  @ApiProperty({ example: '1320', required: false })
   @IsString()
   @IsOptional()
   room: string | null;
@@ -49,47 +107,47 @@ export class CreateMemberDto
 export class UpdateMemberDto
   implements Partial<Omit<Member, 'id' | 'createdAt' | 'updatedAt'>>
 {
-  @ApiProperty({ example: 'Károly', nullable: true })
+  @ApiProperty({ example: 'Károly', required: false })
   @IsString()
   @IsOptional()
   firstName: string | undefined;
 
-  @ApiProperty({ example: 'Simonyi', nullable: true })
+  @ApiProperty({ example: 'Simonyi', required: false })
   @IsString()
   @IsOptional()
   lastName: string | undefined;
 
-  @ApiProperty({ example: 'simonyi.karoly@simonyi.bme.hu', nullable: true })
+  @ApiProperty({ example: 'simonyi.karoly@simonyi.bme.hu', required: false })
   @IsString()
   @IsOptional()
   internalEmail: string | undefined;
 
-  @ApiProperty({ example: 'karoly@simonyi.hu', nullable: true })
+  @ApiProperty({ example: 'karoly@simonyi.hu', required: false })
   @IsString()
   @IsOptional()
   externalEmail: string | undefined;
 
-  @ApiProperty({ example: '+36301234567', nullable: true })
+  @ApiProperty({ example: '+36301234567', required: false })
   @IsString()
   @IsOptional()
   phone: string | undefined;
 
-  @ApiProperty({ example: 'Budapest', nullable: true })
+  @ApiProperty({ example: 'Budapest', required: false })
   @IsString()
   @IsOptional()
   address: string | undefined;
 
-  @ApiProperty({ example: 'Karcsi', nullable: true })
+  @ApiProperty({ example: 'Karcsi', required: false })
   @IsString()
   @IsOptional()
   nickName: string | undefined;
 
-  @ApiProperty({ example: '1320', nullable: true })
+  @ApiProperty({ example: '1320', required: false })
   @IsString()
   @IsOptional()
   room: string | undefined;
 
-  @ApiProperty({ example: $Enums.MemberStatus.ACTIVE, nullable: true })
+  @ApiProperty({ example: $Enums.MemberStatus.ACTIVE, required: false })
   @IsEnum($Enums.MemberStatus)
   @IsOptional()
   status: $Enums.MemberStatus | undefined;

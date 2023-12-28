@@ -15,7 +15,7 @@ export class AuthorizationController {
   }
 
   @MessagePattern(AuthorizationMessagePatterns.REGISTER)
-  async register(data: RegisterDto): Promise<string | undefined> {
+  async register(data: RegisterDto): Promise<string | null> {
     const user = await this.authorizationService.createUser(data);
     return this.authorizationService.createJwtToken(user.id);
   }

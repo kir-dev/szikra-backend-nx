@@ -7,6 +7,7 @@ import {
 } from '@nestjs/microservices';
 import { ServiceNames } from '@szikra-backend-nx/service-constants';
 
+import { AuthorizationController } from './authorization.controller';
 import { CommunitiesController } from './community.controller';
 import { ConfigService } from './config.service';
 import { GatewayController } from './gateway.controller';
@@ -18,7 +19,12 @@ import { MemberController } from './member.controller';
       secret: 'secret',
     }),
   ],
-  controllers: [GatewayController, MemberController, CommunitiesController],
+  controllers: [
+    GatewayController,
+    MemberController,
+    CommunitiesController,
+    AuthorizationController,
+  ],
   providers: [
     ConfigService,
     {

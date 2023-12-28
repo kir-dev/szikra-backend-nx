@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { Member } from '@prisma/client';
 import { MembersMessagePatterns } from '@szikra-backend-nx/service-constants';
 import {
   CreateMemberDto,
   DtoWithId,
+  MemberDto,
   UpdateMemberDto,
 } from '@szikra-backend-nx/types';
 
@@ -15,27 +15,27 @@ export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
   @MessagePattern(MembersMessagePatterns.GET_MEMBERS)
-  getMembers(): Promise<Member[]> {
+  getMembers(): Promise<MemberDto[]> {
     return this.memberService.getMembers();
   }
 
   @MessagePattern(MembersMessagePatterns.GET_MEMBER_BY_ID)
-  getMemberById(id: string): Promise<Member> {
+  getMemberById(id: string): Promise<MemberDto> {
     return this.memberService.getMemberById(id);
   }
 
   @MessagePattern(MembersMessagePatterns.CREATE_MEMBER)
-  createMember(data: CreateMemberDto): Promise<Member> {
+  createMember(data: CreateMemberDto): Promise<MemberDto> {
     return this.memberService.createMember(data);
   }
 
   @MessagePattern(MembersMessagePatterns.UPDATE_MEMBER)
-  updateMember({ id, data }: DtoWithId<UpdateMemberDto>): Promise<Member> {
+  updateMember({ id, data }: DtoWithId<UpdateMemberDto>): Promise<MemberDto> {
     return this.memberService.updateMember(id, data);
   }
 
   @MessagePattern(MembersMessagePatterns.DELETE_MEMBER)
-  deleteMember(id: string): Promise<Member> {
+  deleteMember(id: string): Promise<MemberDto> {
     return this.memberService.deleteMember(id);
   }
 }

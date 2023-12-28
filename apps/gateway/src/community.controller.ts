@@ -10,8 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { Community } from '@prisma/client';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { AuthGuard, Permissions } from '@szikra-backend-nx/auth-guard';
 import { CommunitiesPermissions } from '@szikra-backend-nx/permissions';
 import {
@@ -19,6 +18,7 @@ import {
   ServiceNames,
 } from '@szikra-backend-nx/service-constants';
 import {
+  CommunityDto,
   CreateCommunityDto,
   UpdateCommunityDto,
 } from '@szikra-backend-nx/types';
@@ -35,9 +35,10 @@ export class CommunitiesController {
 
   @Permissions([CommunitiesPermissions.READ])
   @Get()
-  getCommunities(): Promise<Community[]> {
+  @ApiOkResponse({ type: CommunityDto, isArray: true })
+  getCommunities(): Promise<CommunityDto[]> {
     return firstValueFrom(
-      this.communitiesService.send<Community[]>(
+      this.communitiesService.send<CommunityDto[]>(
         CommunitiesMessagePatterns.GET_COMMUNITIES,
         {},
       ),
@@ -46,9 +47,10 @@ export class CommunitiesController {
 
   @Permissions([CommunitiesPermissions.READ])
   @Get(':id')
-  getCommunityById(@Param('id') id: string): Promise<Community> {
+  @ApiOkResponse({ type: CommunityDto })
+  getCommunityById(@Param('id') id: string): Promise<CommunityDto> {
     return firstValueFrom(
-      this.communitiesService.send<Community>(
+      this.communitiesService.send<CommunityDto>(
         CommunitiesMessagePatterns.GET_COMMUNITY_BY_ID,
         id,
       ),
@@ -57,9 +59,10 @@ export class CommunitiesController {
 
   @Permissions([CommunitiesPermissions.CREATE])
   @Post()
-  createCommunity(@Body() body: CreateCommunityDto): Promise<Community> {
+  @ApiOkResponse({ type: CommunityDto })
+  createCommunity(@Body() body: CreateCommunityDto): Promise<CommunityDto> {
     return firstValueFrom(
-      this.communitiesService.send<Community>(
+      this.communitiesService.send<CommunityDto>(
         CommunitiesMessagePatterns.CREATE_COMMUNITY,
         body,
       ),
@@ -68,12 +71,13 @@ export class CommunitiesController {
 
   @Permissions([CommunitiesPermissions.UPDATE])
   @Patch(':id')
+  @ApiOkResponse({ type: CommunityDto })
   updateCommunity(
     @Param('id') id: string,
     @Body() body: UpdateCommunityDto,
-  ): Promise<Community> {
+  ): Promise<CommunityDto> {
     return firstValueFrom(
-      this.communitiesService.send<Community>(
+      this.communitiesService.send<CommunityDto>(
         CommunitiesMessagePatterns.UPDATE_COMMUNITY,
         {
           id,
@@ -86,9 +90,10 @@ export class CommunitiesController {
   @Permissions([CommunitiesPermissions.DELETE])
   @Permissions(['delete'])
   @Delete(':id')
+  @ApiOkResponse()
   async deleteCommunity(@Param('id') id: string): Promise<void> {
     await firstValueFrom(
-      this.communitiesService.send<Community>(
+      this.communitiesService.send<CommunityDto>(
         CommunitiesMessagePatterns.DELETE_COMMUNITY,
         id,
       ),
