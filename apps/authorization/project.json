@@ -14,8 +14,7 @@
         "outputPath": "dist/apps/authorization",
         "main": "apps/authorization/src/main.ts",
         "tsConfig": "apps/authorization/tsconfig.json",
-        "webpackConfig": "apps/authorization/webpack.config.js",
-        "generatePackageJson": true
+        "webpackConfig": "apps/authorization/webpack.config.js"
       },
       "configurations": {
         "development": {},

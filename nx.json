@@ -3,6 +3,9 @@
   "targetDefaults": {
     "build": {
       "cache": true,
+      "options": {
+        "generatePackageJson": true
+      },
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     },

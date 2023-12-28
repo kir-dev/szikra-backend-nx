@@ -1,6 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { $Enums, Member } from '@prisma/client';
+import { Member } from '@prisma/client';
 import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
+
+enum MemberStatus {
+  NEWBIE = 'NEWBIE',
+  ACTIVE = 'ACTIVE',
+  PASSIVE = 'PASSIVE',
+  DELETED = 'DELETED',
+  ARCHIVED = 'ARCHIVED',
+  RETIRED = 'RETIRED',
+}
 
 export class MemberDto implements Member {
   @ApiProperty({ example: 'e3dc756a-0523-45bc-8a56-77e93ba71450' })
@@ -44,9 +53,8 @@ export class MemberDto implements Member {
   @IsOptional()
   room: string | null;
 
-  @ApiProperty({ example: $Enums.MemberStatus.ACTIVE })
-  @IsEnum($Enums.MemberStatus)
-  status: $Enums.MemberStatus;
+  @ApiProperty({ example: MemberStatus.ACTIVE })
+  status: keyof typeof MemberStatus;
 
   @ApiProperty({ example: new Date() })
   @IsDate()
@@ -99,9 +107,9 @@ export class CreateMemberDto
   @IsOptional()
   room: string | null;
 
-  @ApiProperty({ example: $Enums.MemberStatus.ACTIVE })
-  @IsEnum($Enums.MemberStatus)
-  status: $Enums.MemberStatus;
+  @ApiProperty({ example: MemberStatus.ACTIVE })
+  @IsEnum(MemberStatus)
+  status: keyof typeof MemberStatus;
 }
 
 export class UpdateMemberDto
@@ -147,8 +155,7 @@ export class UpdateMemberDto
   @IsOptional()
   room: string | undefined;
 
-  @ApiProperty({ example: $Enums.MemberStatus.ACTIVE, required: false })
-  @IsEnum($Enums.MemberStatus)
+  @ApiProperty({ example: MemberStatus.ACTIVE, required: false })
   @IsOptional()
-  status: $Enums.MemberStatus | undefined;
+  status: keyof typeof MemberStatus | undefined;
 }

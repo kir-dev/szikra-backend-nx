@@ -31,6 +31,12 @@ services:
       - ./apps/communities/.env.docker
     build:
       dockerfile: ./apps/communities/Dockerfile
+  roles-service:
+    image: roles-service
+    env_file:
+      - ./apps/roles/.env.docker
+    build:
+      dockerfile: ./apps/roles/Dockerfile
 
 networks:
   default:
