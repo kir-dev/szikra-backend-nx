@@ -75,4 +75,9 @@ export class RolesController {
   }: DtoWithId<AssignUserDto>): Promise<RoleWithPermissionsDto> {
     return this.rolesService.unassignUserFromRole(id, userId);
   }
+
+  @MessagePattern(RolesMessagePatterns.GET_PERMISSIONS)
+  getPermissions(): string[] {
+    return this.rolesService.getAvailablePermissions();
+  }
 }

@@ -56,8 +56,7 @@ export class PermissionDto implements RolePermission {
 }
 
 export class RoleWithPermissionsDto extends RoleDto {
-  @ApiProperty()
-  @IsString({ each: true })
+  @ApiProperty({ type: [PermissionDto] })
   permissions: PermissionDto[];
 }
 

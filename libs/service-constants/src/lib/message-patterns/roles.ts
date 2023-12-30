@@ -8,6 +8,7 @@ export enum RolesMessagePatterns {
   UNASSIGN_PERMISSION = 'roles.unassign_permission',
   ASSIGN_USER = 'roles.assign_user',
   UNASSIGN_USER = 'roles.unassign_user',
+  GET_PERMISSIONS = 'roles.get_permissions',
 }
 
 export enum RolesCommunityMessagePatterns {

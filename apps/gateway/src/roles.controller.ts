@@ -36,6 +36,18 @@ export class RolesController {
   ) {}
 
   @Permissions([RolesPermissions.READ])
+  @Get('permissions')
+  @ApiOkResponse({ type: String, isArray: true })
+  async getPermissions(): Promise<string[]> {
+    return firstValueFrom(
+      this.rolesService.send<string[]>(
+        RolesMessagePatterns.GET_PERMISSIONS,
+        {},
+      ),
+    );
+  }
+
+  @Permissions([RolesPermissions.READ])
   @Get()
   @ApiOkResponse({ type: RoleWithPermissionsDto, isArray: true })
   async getRoles(): Promise<RoleWithPermissionsDto[]> {

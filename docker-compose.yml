@@ -37,7 +37,16 @@ services:
       - ./apps/roles/.env.docker
     build:
       dockerfile: ./apps/roles/Dockerfile
-
+  db:
+    image: postgres:alpine
+    env_file:
+      - .env
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}" ]
+    networks:
+      - default
 networks:
   default:
     driver: bridge

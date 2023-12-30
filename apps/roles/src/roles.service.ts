@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import * as Permissions from '@szikra-backend-nx/permissions';
 import { PrismaService } from '@szikra-backend-nx/prisma';
 import {
   CreateRoleDto,
@@ -113,6 +114,16 @@ export class RolesService {
         },
       },
       include: { permissions: true },
+    });
+  }
+
+  getAvailablePermissions(): string[] {
+    return Object.values({
+      ...Permissions.GlobalPermissions,
+      ...Permissions.CommonPermissions,
+      ...Permissions.CommunitiesPermissions,
+      ...Permissions.MembersPermissions,
+      ...Permissions.RolesPermissions,
     });
   }
 }
