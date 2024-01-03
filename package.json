@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "prisma generate",
-    "start": "nx run-many --target=serve",
+    "start": "nx run-many --target=serve --maxParallel=100",
     "build": "nx run-many --target=build",
     "seed-roles": "ts-node ./prisma/seed.ts"
   },

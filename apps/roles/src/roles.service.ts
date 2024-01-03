@@ -124,6 +124,7 @@ export class RolesService {
       ...Permissions.CommunitiesPermissions,
       ...Permissions.MembersPermissions,
       ...Permissions.RolesPermissions,
+      ...Permissions.UsersPermissions,
     });
   }
 }

@@ -13,6 +13,7 @@ export class ConfigService {
     authorizationService: ServiceConfig;
     communityService: ServiceConfig;
     roleService: ServiceConfig;
+    userService: ServiceConfig;
   };
 
   constructor() {
@@ -34,6 +35,10 @@ export class ConfigService {
       roleService: {
         host: env.get('ROLE_SERVICE_HOST').required().asString(),
         port: env.get('ROLE_SERVICE_PORT').required().asPortNumber(),
+      },
+      userService: {
+        host: env.get('USER_SERVICE_HOST').required().asString(),
+        port: env.get('USER_SERVICE_PORT').required().asPortNumber(),
       },
     };
   }
