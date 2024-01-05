@@ -1,9 +1,10 @@
 import {
-  Body,
   Controller,
+  Get,
   Inject,
-  Post,
-  UnauthorizedException,
+  InternalServerErrorException,
+  Query,
+  Redirect,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
@@ -11,8 +12,9 @@ import {
   AuthorizationMessagePatterns,
   ServiceNames,
 } from '@szikra-backend-nx/service-constants';
-import { LoginDto } from '@szikra-backend-nx/types';
 import { firstValueFrom } from 'rxjs';
+
+import { ConfigService } from './config.service';
 
 @ApiTags('authorization')
 @Controller('auth')
@@ -20,18 +22,35 @@ export class AuthorizationController {
   constructor(
     @Inject(ServiceNames.AUTHORIZATION)
     private readonly authorizationService: ClientProxy,
+    private readonly configService: ConfigService,
   ) {}
 
-  @Post('login')
-  @ApiOkResponse({ type: String })
-  async login(@Body() body: LoginDto): Promise<string> {
-    const token = await firstValueFrom(
-      this.authorizationService.send<string | null>(
-        AuthorizationMessagePatterns.LOGIN,
-        body,
+  @Get('login')
+  @ApiOkResponse()
+  @Redirect('', 302)
+  async login() {
+    const url = await firstValueFrom(
+      this.authorizationService.send<string>(
+        AuthorizationMessagePatterns.GET_LOGIN_URL,
+        {},
       ),
     );
-    if (!token) throw new UnauthorizedException();
-    return token;
+    if (!url) throw new InternalServerErrorException();
+    return { url };
+  }
+
+  @Get('callback')
+  @ApiOkResponse()
+  @Redirect('', 302)
+  async callback(@Query('code') code: string) {
+    const token = await firstValueFrom(
+      this.authorizationService.send<string>(
+        AuthorizationMessagePatterns.HANDLE_CALLBACK,
+        code,
+      ),
+    );
+    if (!token) throw new InternalServerErrorException();
+    const frontendUrl = this.configService.get('frontendUrl');
+    return { url: `${frontendUrl}/?token=${token}` };
   }
 }

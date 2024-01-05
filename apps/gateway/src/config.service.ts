@@ -14,6 +14,7 @@ export class ConfigService {
     communityService: ServiceConfig;
     roleService: ServiceConfig;
     userService: ServiceConfig;
+    frontendUrl: string;
   };
 
   constructor() {
@@ -40,6 +41,7 @@ export class ConfigService {
         host: env.get('USER_SERVICE_HOST').required().asString(),
         port: env.get('USER_SERVICE_PORT').required().asPortNumber(),
       },
+      frontendUrl: env.get('FRONTEND_URL').required().asString(),
     };
   }
 

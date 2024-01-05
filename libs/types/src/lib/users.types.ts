@@ -25,6 +25,12 @@ export class UserDto implements User {
 
   @ApiProperty({ example: new Date() })
   updatedAt: Date;
+
+  @ApiProperty({
+    example: 'https://lh3.googleusercontent.com',
+    required: false,
+  })
+  picture: string | null;
 }
 
 export class UpdateUserDto

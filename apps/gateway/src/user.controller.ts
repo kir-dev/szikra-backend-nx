@@ -6,6 +6,7 @@ import {
   Inject,
   Param,
   Patch,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -16,7 +17,7 @@ import {
   ServiceNames,
   UsersMessagePatterns,
 } from '@szikra-backend-nx/service-constants';
-import { UpdateUserDto, UserDto } from '@szikra-backend-nx/types';
+import { UpdateUserDto, UserDto, WithUser } from '@szikra-backend-nx/types';
 import { firstValueFrom } from 'rxjs';
 
 @ApiBearerAuth()
@@ -34,6 +35,18 @@ export class UsersController {
   getUsers(): Promise<UserDto[]> {
     return firstValueFrom(
       this.userService.send<UserDto[]>(UsersMessagePatterns.GET_USERS, {}),
+    );
+  }
+
+  @Permissions([UsersPermissions.READ_SELF])
+  @Get('me')
+  @ApiOkResponse({ type: UserDto })
+  async getMe(@Req() req: WithUser): Promise<UserDto> {
+    return await firstValueFrom(
+      this.userService.send<UserDto>(
+        UsersMessagePatterns.GET_USER_BY_ID,
+        req.user.userId,
+      ),
     );
   }
 

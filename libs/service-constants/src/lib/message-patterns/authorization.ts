@@ -1,4 +1,4 @@
 export enum AuthorizationMessagePatterns {
-  LOGIN = 'authorization_login',
-  REGISTER = 'authorization_register',
+  GET_LOGIN_URL = 'get_login_url',
+  HANDLE_CALLBACK = 'handle_callback',
 }
