@@ -9,6 +9,7 @@ import { ServiceNames } from '@szikra-backend-nx/service-constants';
 
 import { AuthorizationController } from './authorization.controller';
 import { CommunitiesController } from './community.controller';
+import { CommunityUserController } from './community-user.controller';
 import { ConfigService } from './config.service';
 import { GatewayController } from './gateway.controller';
 import { MemberController } from './member.controller';
@@ -27,6 +28,7 @@ import { UsersController } from './user.controller';
     AuthorizationController,
     MemberController,
     CommunitiesController,
+    CommunityUserController,
     RolesController,
     RolesCommunityController,
     UsersController,

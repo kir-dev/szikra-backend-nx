@@ -21,6 +21,22 @@ export class UsersService {
     });
   }
 
+  async getUsersByCommunityRole(
+    communityId: string,
+    roleId: string,
+  ): Promise<UserWithRolesDto[]> {
+    return this.prismaService.user.findMany({
+      where: {
+        userRoles: {
+          some: {
+            role: { id: roleId, communityId },
+          },
+        },
+      },
+      include: { userRoles: { include: { role: true } } },
+    });
+  }
+
   async getUsersByRole(roleId: string): Promise<UserDto[]> {
     return this.prismaService.user.findMany({
       where: { userRoles: { some: { roleId } } },

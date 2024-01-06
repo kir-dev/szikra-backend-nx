@@ -29,6 +29,14 @@ export class UsersController {
     return this.usersService.getUsersByRole(roleId);
   }
 
+  @MessagePattern(UsersMessagePatterns.GET_USERS_BY_COMMUNITY_ROLE)
+  getUsersByCommunityRole({
+    id,
+    data: roleId,
+  }: DtoWithId<string>): Promise<UserDto[]> {
+    return this.usersService.getUsersByCommunityRole(id, roleId);
+  }
+
   @MessagePattern(UsersMessagePatterns.UPDATE_USER)
   updateUser({ id, data }: DtoWithId<UpdateUserDto>): Promise<UserDto> {
     return this.usersService.updateUser(id, data);
