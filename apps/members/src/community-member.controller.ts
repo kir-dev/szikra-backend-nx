@@ -2,15 +2,12 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { MembersMessagePatterns } from '@szikra-backend-nx/service-constants';
 import {
-  CreateMemberDto,
   DtoWithId,
   MemberDto,
   MemberWithMembershipDto,
-  UpdateMemberDto,
 } from '@szikra-backend-nx/types';
 
 import { CommunityMemberService } from './community-member.service';
-import { MemberService } from './member.service';
 
 @Controller()
 export class CommunityMemberController {
