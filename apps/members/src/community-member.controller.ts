@@ -23,7 +23,7 @@ export class CommunityMemberController {
     return this.memberService.getMembersForCommunity(communityId);
   }
 
-  @MessagePattern(MembersMessagePatterns.GET_MEMBER_BY_ID)
+  @MessagePattern(MembersMessagePatterns.GET_COMMUNITY_MEMBER_BY_ID)
   getMemberById({
     id,
     data: communityId,
