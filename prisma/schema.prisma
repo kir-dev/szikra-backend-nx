@@ -95,13 +95,14 @@ model Community {
 }
 
 model Membership {
-  id          String    @id @default(uuid())
   member      Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
   memberId    String
   community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId String
-  role        String?
+  position    String?
   updatedAt   DateTime  @updatedAt
   startDate   DateTime  @default(now())
   endDate     DateTime?
+
+  @@id([memberId, communityId])
 }

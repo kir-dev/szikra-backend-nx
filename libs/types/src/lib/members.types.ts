@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Member } from '@prisma/client';
+import { Member, Membership } from '@prisma/client';
 import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
 
 enum MemberStatus {
@@ -158,4 +158,29 @@ export class UpdateMemberDto
   @ApiProperty({ example: MemberStatus.ACTIVE, required: false })
   @IsOptional()
   status: keyof typeof MemberStatus | undefined;
+}
+
+export class MembershipDto implements Membership {
+  @ApiProperty({ example: 'e3dc756a-0523-45bc-8a56-77e93ba71450' })
+  communityId: string;
+
+  @ApiProperty({ example: 'e3dc756a-0523-45bc-8a56-77e93ba71450' })
+  memberId: string;
+
+  @ApiProperty({ example: 'Tag', required: false })
+  position: string | null;
+
+  @ApiProperty({ example: new Date() })
+  startDate: Date;
+
+  @ApiProperty({ example: new Date(), required: false })
+  endDate: Date | null;
+
+  @ApiProperty({ example: new Date() })
+  updatedAt: Date;
+}
+
+export class MemberWithMembershipDto extends MemberDto {
+  @ApiProperty({ type: MembershipDto, isArray: true })
+  memberships: MembershipDto[];
 }

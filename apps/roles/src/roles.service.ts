@@ -118,13 +118,13 @@ export class RolesService {
   }
 
   getAvailablePermissions(): string[] {
-    return Object.values({
-      ...Permissions.GlobalPermissions,
-      ...Permissions.CommonPermissions,
-      ...Permissions.CommunitiesPermissions,
-      ...Permissions.MembersPermissions,
-      ...Permissions.RolesPermissions,
-      ...Permissions.UsersPermissions,
-    });
+    return [
+      Permissions.GlobalPermissions,
+      Permissions.CommonPermissions,
+      Permissions.CommunitiesPermissions,
+      Permissions.MembersPermissions,
+      Permissions.RolesPermissions,
+      Permissions.UsersPermissions,
+    ].reduce<string[]>((acc, curr) => [...acc, ...Object.values(curr)], []);
   }
 }
