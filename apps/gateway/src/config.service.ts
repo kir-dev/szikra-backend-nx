@@ -7,15 +7,19 @@ type ServiceConfig = {
   port: number;
 };
 
+export type ClientProxyOptions = {
+  memberService: ServiceConfig;
+  authorizationService: ServiceConfig;
+  communityService: ServiceConfig;
+  roleService: ServiceConfig;
+  userService: ServiceConfig;
+};
+
 export class ConfigService {
-  private readonly envConfig: ServiceConfig & {
-    memberService: ServiceConfig;
-    authorizationService: ServiceConfig;
-    communityService: ServiceConfig;
-    roleService: ServiceConfig;
-    userService: ServiceConfig;
-    frontendUrl: string;
-  };
+  private readonly envConfig: ServiceConfig &
+    ClientProxyOptions & {
+      frontendUrl: string;
+    };
 
   constructor() {
     this.envConfig = {
