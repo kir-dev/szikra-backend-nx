@@ -1,15 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Member, Membership } from '@prisma/client';
-import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsOptional, IsString } from 'class-validator';
 
-enum MemberStatus {
-  NEWBIE = 'NEWBIE',
-  ACTIVE = 'ACTIVE',
-  PASSIVE = 'PASSIVE',
-  DELETED = 'DELETED',
-  ARCHIVED = 'ARCHIVED',
-  RETIRED = 'RETIRED',
-}
+import { CommunityDto } from './communities.types';
+
+type MemberStatusType =
+  | 'NEWBIE'
+  | 'ACTIVE'
+  | 'PASSIVE'
+  | 'DELETED'
+  | 'ARCHIVED'
+  | 'RETIRED';
 
 export class MemberDto implements Member {
   @ApiProperty({ example: 'e3dc756a-0523-45bc-8a56-77e93ba71450' })
@@ -53,8 +54,8 @@ export class MemberDto implements Member {
   @IsOptional()
   room: string | null;
 
-  @ApiProperty({ example: MemberStatus.ACTIVE })
-  status: keyof typeof MemberStatus;
+  @ApiProperty({ example: 'NEWBIE' })
+  status: MemberStatusType;
 
   @ApiProperty({ example: new Date() })
   @IsDate()
@@ -107,9 +108,8 @@ export class CreateMemberDto
   @IsOptional()
   room: string | null;
 
-  @ApiProperty({ example: MemberStatus.ACTIVE })
-  @IsEnum(MemberStatus)
-  status: keyof typeof MemberStatus;
+  @ApiProperty({ example: 'NEWBIE' })
+  status: MemberStatusType;
 }
 
 export class UpdateMemberDto
@@ -155,9 +155,9 @@ export class UpdateMemberDto
   @IsOptional()
   room: string | undefined;
 
-  @ApiProperty({ example: MemberStatus.ACTIVE, required: false })
+  @ApiProperty({ example: 'NEWBIE', required: false })
   @IsOptional()
-  status: keyof typeof MemberStatus | undefined;
+  status: MemberStatusType | undefined;
 }
 
 export class MembershipDto implements Membership {
@@ -183,4 +183,14 @@ export class MembershipDto implements Membership {
 export class MemberWithMembershipDto extends MemberDto {
   @ApiProperty({ type: MembershipDto, isArray: true })
   memberships: MembershipDto[];
+}
+
+export class MembershipWithCommunityDto extends MembershipDto {
+  @ApiProperty({ type: CommunityDto })
+  community: CommunityDto;
+}
+
+export class MemberWithCommunityDto extends MemberDto {
+  @ApiProperty({ type: MembershipWithCommunityDto, isArray: true })
+  memberships: MembershipWithCommunityDto[];
 }

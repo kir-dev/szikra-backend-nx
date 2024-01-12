@@ -3,6 +3,7 @@ import { PrismaService } from '@szikra-backend-nx/prisma';
 import {
   CreateMemberDto,
   MemberDto,
+  MemberWithCommunityDto,
   UpdateMemberDto,
 } from '@szikra-backend-nx/types';
 
@@ -20,10 +21,17 @@ export class MemberService {
     return this.prisma.member.findMany();
   }
 
-  async getMemberById(id: string): Promise<MemberDto> {
+  async getMemberById(id: string): Promise<MemberWithCommunityDto> {
     return this.prisma.member.findUnique({
       where: {
         id,
+      },
+      include: {
+        memberships: {
+          include: {
+            community: true,
+          },
+        },
       },
     });
   }
@@ -45,11 +53,18 @@ export class MemberService {
     });
   }
 
-  async getMemberByUserId(userId: string) {
+  async getMemberByUserId(userId: string): Promise<MemberWithCommunityDto> {
     return this.prisma.member.findFirst({
       where: {
         user: {
           id: userId,
+        },
+      },
+      include: {
+        memberships: {
+          include: {
+            community: true,
+          },
         },
       },
     });

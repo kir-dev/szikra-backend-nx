@@ -21,6 +21,7 @@ import {
 import {
   CreateMemberDto,
   MemberDto,
+  MemberWithCommunityDto,
   UpdateMemberDto,
   WithUser,
 } from '@szikra-backend-nx/types';
@@ -49,10 +50,10 @@ export class MemberController {
 
   @Permissions([MembersPermissions.READ_SELF])
   @Get('me')
-  @ApiOkResponse({ type: MemberDto })
-  getMyMember(@Req() request: WithUser): Promise<MemberDto> {
+  @ApiOkResponse({ type: MemberWithCommunityDto })
+  getMyMember(@Req() request: WithUser): Promise<MemberWithCommunityDto> {
     return firstValueFrom(
-      this.memberService.send<MemberDto>(
+      this.memberService.send<MemberWithCommunityDto>(
         MembersMessagePatterns.GET_MEMBER_BY_USER_ID,
         request.user.userId,
       ),
@@ -61,10 +62,10 @@ export class MemberController {
 
   @Permissions([MembersPermissions.READ])
   @Get(':id')
-  @ApiOkResponse({ type: MemberDto })
-  getMemberById(@Param('id') id: string): Promise<MemberDto> {
+  @ApiOkResponse({ type: MemberWithCommunityDto })
+  getMemberById(@Param('id') id: string): Promise<MemberWithCommunityDto> {
     return firstValueFrom(
-      this.memberService.send<MemberDto>(
+      this.memberService.send<MemberWithCommunityDto>(
         MembersMessagePatterns.GET_MEMBER_BY_ID,
         id,
       ),

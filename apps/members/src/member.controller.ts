@@ -5,6 +5,7 @@ import {
   CreateMemberDto,
   DtoWithId,
   MemberDto,
+  MemberWithCommunityDto,
   UpdateMemberDto,
 } from '@szikra-backend-nx/types';
 
@@ -20,12 +21,12 @@ export class MemberController {
   }
 
   @MessagePattern(MembersMessagePatterns.GET_MEMBER_BY_ID)
-  getMemberById(id: string): Promise<MemberDto> {
+  getMemberById(id: string): Promise<MemberWithCommunityDto> {
     return this.memberService.getMemberById(id);
   }
 
   @MessagePattern(MembersMessagePatterns.GET_MEMBER_BY_USER_ID)
-  getMemberByUserId(userId: string): Promise<MemberDto> {
+  getMemberByUserId(userId: string): Promise<MemberWithCommunityDto> {
     return this.memberService.getMemberByUserId(userId);
   }
 
