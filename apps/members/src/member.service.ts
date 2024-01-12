@@ -44,4 +44,14 @@ export class MemberService {
       },
     });
   }
+
+  async getMemberByUserId(userId: string) {
+    return this.prisma.member.findFirst({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
+  }
 }

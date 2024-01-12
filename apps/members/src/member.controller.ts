@@ -24,6 +24,11 @@ export class MemberController {
     return this.memberService.getMemberById(id);
   }
 
+  @MessagePattern(MembersMessagePatterns.GET_MEMBER_BY_USER_ID)
+  getMemberByUserId(userId: string): Promise<MemberDto> {
+    return this.memberService.getMemberByUserId(userId);
+  }
+
   @MessagePattern(MembersMessagePatterns.CREATE_MEMBER)
   createMember(data: CreateMemberDto): Promise<MemberDto> {
     return this.memberService.createMember(data);

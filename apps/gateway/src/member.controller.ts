@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -21,6 +22,7 @@ import {
   CreateMemberDto,
   MemberDto,
   UpdateMemberDto,
+  WithUser,
 } from '@szikra-backend-nx/types';
 import { firstValueFrom } from 'rxjs';
 
@@ -41,6 +43,18 @@ export class MemberController {
       this.memberService.send<MemberDto[]>(
         MembersMessagePatterns.GET_MEMBERS,
         {},
+      ),
+    );
+  }
+
+  @Permissions([MembersPermissions.READ_SELF])
+  @Get('me')
+  @ApiOkResponse({ type: MemberDto })
+  getMyMember(@Req() request: WithUser): Promise<MemberDto> {
+    return firstValueFrom(
+      this.memberService.send<MemberDto>(
+        MembersMessagePatterns.GET_MEMBER_BY_USER_ID,
+        request.user.userId,
       ),
     );
   }
