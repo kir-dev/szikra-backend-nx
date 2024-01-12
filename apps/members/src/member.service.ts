@@ -13,7 +13,14 @@ export class MemberService {
 
   async createMember(data: CreateMemberDto): Promise<MemberDto> {
     return this.prisma.member.create({
-      data,
+      data: {
+        ...data,
+        user: {
+          connect: {
+            email: data.internalEmail,
+          },
+        },
+      },
     });
   }
 

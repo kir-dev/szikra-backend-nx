@@ -138,6 +138,11 @@ export class AuthorizationService {
         email,
         name,
         picture,
+        member: {
+          connect: {
+            internalEmail: email,
+          },
+        },
       },
     });
   }
