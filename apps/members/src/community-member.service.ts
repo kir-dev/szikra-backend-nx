@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@szikra-backend-nx/prisma';
-import {
-  CreateMemberDto,
-  MemberDto,
-  MemberWithMembershipDto,
-  UpdateMemberDto,
-} from '@szikra-backend-nx/types';
+import { MemberDto, MemberWithMembershipDto } from '@szikra-backend-nx/types';
 
 @Injectable()
 export class CommunityMemberService {
@@ -61,6 +56,7 @@ export class CommunityMemberService {
         memberships: {
           create: {
             communityId,
+            position: 'Tag',
           },
         },
       },
